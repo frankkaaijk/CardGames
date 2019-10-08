@@ -2,7 +2,7 @@
 
 namespace TurnBasedCardGame
 {
-    public class Card
+    public class Card : IEquatable<object>   
     {
         public enum Suits
         {
@@ -27,8 +27,7 @@ namespace TurnBasedCardGame
             Ten,
             Jack,
             Queen,
-            King,
-            Void
+            King
         }
 
         public Values Value { get; }
@@ -38,5 +37,36 @@ namespace TurnBasedCardGame
             Suit = suit;
             Value = value;
         }
+
+        #region IEquatable
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object other)
+        {
+            return EqualsCard(this, other as Card);
+        }
+
+        public static bool operator ==(Card x, Card y)
+        {
+            return EqualsCard(x, y);
+        }
+        public static bool operator !=(Card x, Card y)
+        {
+            return !EqualsCard(x, y);
+        }
+
+        private static bool EqualsCard(Card x, Card y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (x is null) return false;
+            if (y is null) return false;
+
+           return x.Suit == y.Suit && x.Value == y.Value;
+        }
+        #endregion
     }
 }
