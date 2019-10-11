@@ -21,12 +21,25 @@ namespace TurnBasedCardGame
         public string ShowHand()
         {
             var playerHand = string.Empty;
-            foreach(Card card in Hand)
+            foreach (Card card in Hand)
             {
                 playerHand += card.ToString();
             }
 
-            return playerHand;
+            return $"{Name} has :" + playerHand;
+        }
+        public void RemoveCardFromHand(Card card)
+        {
+            if(!Hand.Remove(card))
+            {
+                throw new InvalidOperationException("No such card in the players hand");
+            }
+
+        }
+
+        public void AddCardToHand(Card card)
+        {
+            Hand.Add(card);
         }
 
         #region IEquatable

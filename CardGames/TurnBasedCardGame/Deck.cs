@@ -8,18 +8,17 @@ using System.Collections;
 [assembly: InternalsVisibleTo("TurnBasedCardGameTests")]
 namespace TurnBasedCardGame
 {
-    public class Deck : IEquatable<object>
+    internal class Deck : IEquatable<object>
     {
         internal static Random random = new Random();
         internal List<Card> Cards;
 
         public Deck()
         {
-            Cards = new List<Card>();
-            Initialize();
+            Cards = new List<Card>();            
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             foreach (var suit in (Card.Suits[])Enum.GetValues(typeof(Card.Suits)))
             {
@@ -56,6 +55,16 @@ namespace TurnBasedCardGame
             hand.AddRange(dealtCards);
 
             return hand;
+        }
+
+        public void AddCard(Card card)
+        {
+            Cards.Add(card);
+        }
+
+        public Card GetTopCard()
+        {
+            return Cards.First();
         }
 
         #region IEquatable

@@ -7,7 +7,7 @@ using static TurnBasedCardGame.Card;
 
 namespace TurnBasedCardGameTests
 {
-    public class PlayerTests : IDisposable
+    public class PlayerTests 
     {
         private Deck deck;
         private Player player1, player2;
@@ -15,6 +15,7 @@ namespace TurnBasedCardGameTests
         public PlayerTests()
         {
             deck = new Deck();  // Don't shuffle the deck so we can assume the dealt hands
+            deck.Initialize();
             player1 = new Player("Test1");
             player2 = new Player("Test2");
 
@@ -43,10 +44,30 @@ namespace TurnBasedCardGameTests
             Assert.Contains("Queen of Hearts", player2.ShowHand());
         }
 
-
-        public void Dispose()
+        [Fact]
+        public void RemoveFromHand()
         {
-            // no implementation
+            // Remove unknown card
+            Assert.Throws<InvalidOperationException>(()=>player1.RemoveCardFromHand(new Card(Suits.Diamonds, Values.Queen)));
+            player1.RemoveCardFromHand(new Card(Suits.Hearts, Values.Three));
+            Assert.DoesNotContain(new Card(Suits.Hearts, Values.Three), player1.Hand);
+            Assert.True(3 == player1.Hand.Count);
+                        
+            player2.RemoveCardFromHand(new Card(Suits.Hearts, Values.Jack));
+            Assert.DoesNotContain(new Card(Suits.Hearts, Values.Three), player1.Hand);
+            Assert.True(7 == player2.Hand.Count);
+        }
+
+        [Fact]
+        public void AddCardToHand()
+        {
+            player1.AddCardToHand(new Card(Suits.Diamonds, Values.Three));
+            Assert.Contains(new Card(Suits.Diamonds, Values.Three), player1.Hand);
+            Assert.True(5 == player1.Hand.Count);
+
+            player2.AddCardToHand(new Card(Suits.Clubs, Values.Five));
+            Assert.Contains(new Card(Suits.Clubs, Values.Five), player2.Hand);
+            Assert.True(9 == player2.Hand.Count);
         }
     }
 }

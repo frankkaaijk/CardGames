@@ -10,6 +10,7 @@ namespace TurnBasedCardGameTests
         public void CreateDeck()
         {
             var deck = new Deck();
+            deck.Initialize();
             // 54 cards includes two jokers for each deck
             Assert.Equal(54, deck.Cards.Count);
         }
@@ -28,6 +29,7 @@ namespace TurnBasedCardGameTests
         public void DealHand()
         {
             var deck = new Deck();
+            deck.Initialize();
             Assert.Equal(4, deck.DealHand(4).Count);
             Assert.Equal(8, deck.DealHand(8).Count);
             Assert.Equal(42, deck.Cards.Count);

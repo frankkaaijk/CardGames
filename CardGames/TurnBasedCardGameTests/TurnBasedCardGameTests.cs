@@ -8,20 +8,36 @@ namespace TurnBasedCardGameTests
 {
     public class TurnBasedCardGameTests
     {
-        [Fact]
-        public void AddPlayersTest()
+        private CardGame Game;
+        public TurnBasedCardGameTests()
         {
-            var game = new TurnBasedCardGame.CardGame();
-            Assert.True(game.AddPlayer("Test"));
-            Assert.False(game.AddPlayer("Test"));
-            Assert.True(game.AddPlayer("Test2"));            
+            Game = new CardGame();
+        }
+
+        [Fact]
+        public void AddPlayers()
+        {
+            Assert.True(Game.AddPlayer("Test"));
+            Assert.False(Game.AddPlayer("Test"));
+            Assert.True(Game.AddPlayer("Test2"));
+            Game.StartGame();
+            Assert.Throws<InvalidOperationException>(() => Game.AddPlayer("Test3"));
         }
 
         [Fact]
         public void StartGame()
         {
-            var game = new TurnBasedCardGame.CardGame();
-            Assert.NotNull(game.ShowLastPlayedCard());
+            Assert.NotNull(Game.ShowLastPlayedCard());           
+        }
+
+        [Fact]
+        public void Hit()
+        {
+            Game.AddPlayer("Test1");
+            Assert.Throws<InvalidOperationException>(() => Game.Hit("Test1", "King of Hearts"));
+            Game.StartGame();
+            Assert.Throws<FormatException>(() => Game.Hit("Test1", "Hearts of King"));
+            Game.Hit("Test1", "King of Hearts");
         }
     }
 }

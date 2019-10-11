@@ -13,7 +13,17 @@ namespace CrazyEightsConsole
 
             var crazyEightsGame = new TurnBasedCardGame.CardGame();
             SetupPlayers(crazyEightsGame, numberOfPlayers);
-            Console.WriteLine("Begin Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());            
+            crazyEightsGame.StartGame();
+            Console.WriteLine("Begin Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());
+
+            Console.Write(crazyEightsGame.ShowPlayersHand("Frank"));
+            while (true)
+            {
+                crazyEightsGame.Hit("Frank", Console.ReadLine());
+                Console.Write(crazyEightsGame.ShowPlayersHand("Frank"));
+
+                Console.WriteLine("Continue Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());
+            }
         }
 
         private static void SetupPlayers(CardGame cardGame, int numberOfPlayers)
