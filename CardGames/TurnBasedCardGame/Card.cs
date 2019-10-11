@@ -38,6 +38,19 @@ namespace TurnBasedCardGame
             Value = value;
         }
 
+        public override string ToString()
+        {
+            if( Suit == Suits.Jokers )
+            {
+                return $"{Enum.GetName(typeof(Card.Suits), Suit)}" +
+                System.Environment.NewLine;
+            }
+
+            return $"{Enum.GetName(typeof(Card.Values), Value)} of " +
+                $"{Enum.GetName(typeof(Card.Suits), Suit)}" +
+                System.Environment.NewLine;
+        }
+
         #region IEquatable
 
         public override int GetHashCode()
