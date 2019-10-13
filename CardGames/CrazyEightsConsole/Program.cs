@@ -8,6 +8,7 @@ namespace CrazyEightsConsole
         static void Main(string[] args)
         {
             Console.WriteLine("Crazy Eights");
+            Console.WriteLine("============");
             Console.WriteLine("How many players?");
             Int32.TryParse(Console.ReadLine(), out var numberOfPlayers);
 

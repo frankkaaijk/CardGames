@@ -11,7 +11,7 @@ namespace TurnBasedCardGameTests
         [Fact]
         public void AddPlayersTest()
         {
-            var game = new TurnBasedCardGame.CardGame();
+            var game = new CardGame();
             Assert.True(game.AddPlayer("Test"));
             Assert.False(game.AddPlayer("Test"));
             Assert.True(game.AddPlayer("Test2"));            
@@ -20,7 +20,7 @@ namespace TurnBasedCardGameTests
         [Fact]
         public void StartGame()
         {
-            var game = new TurnBasedCardGame.CardGame();
+            var game = new CardGame();
             Assert.NotNull(game.ShowLastPlayedCard());
         }
     }

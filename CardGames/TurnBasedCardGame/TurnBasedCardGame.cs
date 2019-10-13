@@ -9,15 +9,16 @@ namespace TurnBasedCardGame
     {
         internal HashSet<Player> Players;
         internal Deck Deck;
-        internal List<Card> PlayedCards;
+        internal Deck PlayedCards;
         //private ICardGame CardGame;
 
         public CardGame()
         {
-            Deck = new Deck();                  // Deck to play with
-            Deck.Shuffle();                     // Shuffle the deck
-            Players = new HashSet<Player>();    // Initialize list of players
-            PlayedCards = Deck.DealHand(1);     // First card to play with
+            Deck = new Deck(Deck.DeckType.StandardWithJokers);  // Deck to play with
+            PlayedCards = new Deck();                           // Deck to stack on
+            Deck.Shuffle();                                     // Shuffle the deck
+            Players = new HashSet<Player>();                    // Initialize list of players
+            PlayedCards.AddCard(Deck.DealHand(1).First());      // First card to play with
         }
 
         public bool AddPlayer(string playerName)
@@ -29,7 +30,7 @@ namespace TurnBasedCardGame
 
         public string ShowLastPlayedCard()
         {
-            return PlayedCards.Last().ToString();
+            return PlayedCards.TopOfDeck().ToString();
         }
     }
 }
