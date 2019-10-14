@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TurnBasedCardGame;
 using Xunit;
 using static TurnBasedCardGame.Card;
+using static TurnBasedCardGame.Deck;
 
 namespace TurnBasedCardGameTests
 {
@@ -14,15 +13,14 @@ namespace TurnBasedCardGameTests
 
         public PlayerTests()
         {
-            deck = new Deck();  // Don't shuffle the deck so we can assume the dealt hands
-            deck.Initialize();
+            deck = new Deck(DeckType.StandardWithJokers);  // Don't shuffle the deck so we can assume the dealt hands
             player1 = new Player("Test1");
             player2 = new Player("Test2");
 
-            // Ace of Hearts, Two of Hearts, Three of Hearts, Four of Harts
+            // Joker (x2), King of Clubs, Queen of Clubs
             player1.GiveHand(deck.DealHand(4));
-            // Five of Hearts, Six of Hearts, Seven Of Hearts, Eight of Harts,
-            // Nine of Hearts, Ten of Hearts, Jack of Hearts, Queen of Harts
+            // Jack of Clubs, Ten of Clubs, Nine of Clubs, Eight of Clubs, 
+            // Seven of Clubs, six of Clubs, Five of Clubs, Four of Clubs
             player2.GiveHand(deck.DealHand(8));
         }
 
@@ -30,18 +28,18 @@ namespace TurnBasedCardGameTests
         public void DealHand()
         {
             Assert.Equal(4, player1.Hand.Count);
-            Assert.Contains(new Card(Suits.Hearts, Values.Four), player1.Hand);
-            Assert.DoesNotContain(new Card(Suits.Clubs, Values.Ace), player1.Hand);
+            Assert.Contains(new Card(Suits.Clubs, Values.King), player1.Hand);
+            Assert.DoesNotContain(new Card(Suits.Diamonds, Values.Ace), player1.Hand);
             Assert.Equal(8, player2.Hand.Count);
-            Assert.Contains(new Card(Suits.Hearts, Values.Queen), player2.Hand);
-            Assert.DoesNotContain(new Card(Suits.Diamonds, Values.Ace), player2.Hand);
+            Assert.Contains(new Card(Suits.Clubs, Values.Eight), player2.Hand);
+            Assert.DoesNotContain(new Card(Suits.Hearts, Values.Ace), player2.Hand);
         }
 
         [Fact]
         public void DisplayHand()
         {
-            Assert.Contains("Ace of Hearts", player1.ShowHand());
-            Assert.Contains("Queen of Hearts", player2.ShowHand());
+            Assert.Contains("King of Clubs", player1.ShowHand());
+            Assert.Contains("Eight of Clubs", player2.ShowHand());
         }
 
         [Fact]
@@ -49,12 +47,12 @@ namespace TurnBasedCardGameTests
         {
             // Remove unknown card
             Assert.Throws<InvalidOperationException>(()=>player1.RemoveCardFromHand(new Card(Suits.Diamonds, Values.Queen)));
-            player1.RemoveCardFromHand(new Card(Suits.Hearts, Values.Three));
-            Assert.DoesNotContain(new Card(Suits.Hearts, Values.Three), player1.Hand);
+            player1.RemoveCardFromHand(new Card(Suits.Clubs, Values.King));
+            Assert.DoesNotContain(new Card(Suits.Clubs, Values.King), player1.Hand);
             Assert.True(3 == player1.Hand.Count);
                         
-            player2.RemoveCardFromHand(new Card(Suits.Hearts, Values.Jack));
-            Assert.DoesNotContain(new Card(Suits.Hearts, Values.Three), player1.Hand);
+            player2.RemoveCardFromHand(new Card(Suits.Clubs, Values.Eight));
+            Assert.DoesNotContain(new Card(Suits.Clubs, Values.Eight), player1.Hand);
             Assert.True(7 == player2.Hand.Count);
         }
 

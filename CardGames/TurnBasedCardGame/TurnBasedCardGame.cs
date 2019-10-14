@@ -16,12 +16,11 @@ namespace TurnBasedCardGame
 
         public CardGame()
         {
-            Deck = new Deck();                  // Deck to play with
-            Deck.Initialize();
-            Deck.Shuffle();                     // Shuffle the deck
-            Players = new HashSet<Player>();    // Initialize list of players
-            PlayedCardsDeck = new Deck();
-            PlayedCardsDeck.AddCard(Deck.DealHand(1).First());     
+            Deck = new Deck(Deck.DeckType.StandardWithJokers);  // Deck to play with
+            PlayedCardsDeck = new Deck();                           // Deck to stack on
+            Deck.Shuffle();                                     // Shuffle the deck
+            Players = new HashSet<Player>();                    // Initialize list of players
+            PlayedCardsDeck.AddCard(Deck.DealHand(1).First());      // First card to play with
         }
 
         public bool AddPlayer(string playerName)
@@ -39,7 +38,7 @@ namespace TurnBasedCardGame
 
         public string ShowLastPlayedCard()
         {
-            return PlayedCardsDeck.GetTopCard().ToString();
+            return PlayedCardsDeck.TopOfDeck().ToString();
         }
 
         public string ShowPlayersHand(string playername)

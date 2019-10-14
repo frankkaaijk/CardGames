@@ -38,6 +38,7 @@ namespace TurnBasedCardGameTests
             Game.StartGame();
             Assert.Throws<FormatException>(() => Game.Hit("Test1", "Hearts of King"));
             Game.Hit("Test1", "King of Hearts");
+            Assert.NotNull(Game.ShowLastPlayedCard());
         }
     }
 }
