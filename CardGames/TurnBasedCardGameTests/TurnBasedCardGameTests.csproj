@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CrazyEightGame\CrazyEightGame.csproj" />
     <ProjectReference Include="..\TurnBasedCardGame\TurnBasedCardGame.csproj" />
   </ItemGroup>
 

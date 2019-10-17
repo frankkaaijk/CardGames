@@ -9,19 +9,32 @@ namespace CrazyEightsConsole
         {
             Console.WriteLine("Crazy Eights");
             Console.WriteLine("============");
-            Console.WriteLine("How many players?");
+            Console.Write("How many players?");
             Int32.TryParse(Console.ReadLine(), out var numberOfPlayers);
 
-            var crazyEightsGame = new TurnBasedCardGame.CardGame();
+            var crazyEightGame = new SheddingCardGames.CrazyEightGame();
+
+            var crazyEightsGame = new CardGame(crazyEightGame);
             SetupPlayers(crazyEightsGame, numberOfPlayers);
             crazyEightsGame.StartGame();
             Console.WriteLine("Begin Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());
 
-            Console.Write(crazyEightsGame.ShowPlayersHand("Frank"));
             while (true)
             {
-                crazyEightsGame.Hit("Frank", Console.ReadLine());
-                Console.Write(crazyEightsGame.ShowPlayersHand("Frank"));
+                string currentPlayer = crazyEightsGame.ShowCurrentPlayer();
+                Console.WriteLine(crazyEightsGame.ShowPlayersHand(currentPlayer));
+                Console.WriteLine ("Hit (1) or Stay (2)?");
+                int play;
+                int.TryParse(Console.ReadLine(), out play);
+                if (play == 1)
+                {
+                    Console.Write("Card to play:");
+                    crazyEightsGame.Hit(Console.ReadLine());
+                }
+                else if (play == 2)
+                {
+                    crazyEightsGame.Stay();
+                }
 
                 Console.WriteLine("Continue Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());
             }

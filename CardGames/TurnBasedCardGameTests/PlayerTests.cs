@@ -13,7 +13,7 @@ namespace TurnBasedCardGameTests
 
         public PlayerTests()
         {
-            deck = new Deck(DeckType.StandardWithJokers);  // Don't shuffle the deck so we can assume the dealt hands
+            deck = new Deck(DeckType.FrenchIncludingJokers);  // Don't shuffle the deck so we can assume the dealt hands
             player1 = new Player("Test1");
             player2 = new Player("Test2");
 

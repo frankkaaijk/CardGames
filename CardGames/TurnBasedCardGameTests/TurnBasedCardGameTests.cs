@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TurnBasedCardGame;
 using Xunit;
 
@@ -11,7 +9,8 @@ namespace TurnBasedCardGameTests
         private CardGame Game;
         public TurnBasedCardGameTests()
         {
-            Game = new CardGame();
+            var crazyEightGame = new SheddingCardGames.CrazyEightGame();
+            Game = new CardGame(crazyEightGame);
         }
 
         [Fact]
@@ -34,11 +33,37 @@ namespace TurnBasedCardGameTests
         public void Hit()
         {
             Game.AddPlayer("Test1");
-            Assert.Throws<InvalidOperationException>(() => Game.Hit("Test1", "King of Hearts"));
+            Assert.Throws<InvalidOperationException>(() => Game.Hit("King of Hearts"));
             Game.StartGame();
-            Assert.Throws<FormatException>(() => Game.Hit("Test1", "Hearts of King"));
-            Game.Hit("Test1", "King of Hearts");
+            Assert.Throws<FormatException>(() => Game.Hit("Hearts of King"));
+            Game.Hit("King of Hearts");
             Assert.NotNull(Game.ShowLastPlayedCard());
+        }
+
+        [Fact]
+        public void ProgressGame()
+        {
+            Game.AddPlayer("Test1");
+            Game.AddPlayer("Test2");
+            Game.AddPlayer("Test3");
+            Game.StartGame();
+            Assert.Equal("Test1", Game.ShowCurrentPlayer());
+            Game.ProgressPlay(NextMove.NextPlayer);
+            Assert.Equal("Test2", Game.ShowCurrentPlayer());
+            Game.ProgressPlay(NextMove.NextPlayer);
+            Assert.Equal("Test3", Game.ShowCurrentPlayer());
+            Game.ProgressPlay(NextMove.ReservePlayOrder);
+            Game.ProgressPlay(NextMove.NextPlayer);
+            Assert.Equal("Test2", Game.ShowCurrentPlayer());
+            Game.ProgressPlay(NextMove.CurrentPlayer);
+            Assert.Equal("Test2", Game.ShowCurrentPlayer());
+            Game.ProgressPlay(NextMove.ReservePlayOrder);
+            Game.ProgressPlay(NextMove.NextPlayer);
+            Assert.Equal("Test3", Game.ShowCurrentPlayer());
+            Game.ProgressPlay(NextMove.NextPlayer);
+            Assert.Equal("Test1", Game.ShowCurrentPlayer());
+            Game.ProgressPlay(NextMove.SkipNextPlayer);
+            Assert.Equal("Test3", Game.ShowCurrentPlayer());
         }
     }
 }

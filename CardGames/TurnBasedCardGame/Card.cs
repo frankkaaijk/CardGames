@@ -30,7 +30,7 @@ namespace TurnBasedCardGame
             Queen,
             King
         }
-
+        
         public Values Value { get; }
         public Suits Suit { get; }
         public Card(Suits suit, Values value)

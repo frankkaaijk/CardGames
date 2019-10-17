@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Collections;
 
 [assembly: InternalsVisibleTo("TurnBasedCardGameTests")]
 namespace TurnBasedCardGame
 {
-    internal class Deck : IEquatable<object>
+    public class Deck : IEquatable<object>
     {
         public enum DeckType
         {
             Empty,            
-            Standard,
-            StandardWithJokers
+            French,
+            FrenchIncludingJokers
         }
 
         internal static Random random = new Random();
@@ -37,10 +35,10 @@ namespace TurnBasedCardGame
             {
                 case DeckType.Empty:
                     break;
-                case DeckType.Standard:
+                case DeckType.French:
                     FillDeck();
                     break;
-                case DeckType.StandardWithJokers:
+                case DeckType.FrenchIncludingJokers:
                     FillDeck();
                     // Add 2 jokers
                     Cards.Push(new Card(Card.Suits.Jokers, Card.Values.Ace));

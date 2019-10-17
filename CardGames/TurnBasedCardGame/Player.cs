@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TurnBasedCardGame
 {
-    internal class Player : IEquatable<object>
+    public class Player : IEquatable<object>
     {
         public List<Card> Hand { get; set; }
         public string Name { get; } = string.Empty;
@@ -26,7 +26,7 @@ namespace TurnBasedCardGame
                 playerHand += card.ToString();
             }
 
-            return $"{Name} has :" + playerHand;
+            return $"{Name} has:" + Environment.NewLine + playerHand;
         }
         public void RemoveCardFromHand(Card card)
         {
@@ -36,10 +36,17 @@ namespace TurnBasedCardGame
             }
 
         }
-
         public void AddCardToHand(Card card)
         {
             Hand.Add(card);
+        }
+
+        public void AddCardsToHand(List<Card> cards)
+        {
+            foreach(var card in cards)
+            {
+                AddCardToHand(card);
+            }
         }
 
         #region IEquatable

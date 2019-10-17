@@ -6,7 +6,9 @@ namespace TurnBasedCardGame
 {
     public interface ICardGame
     {
-        void Hit(Card card);
-        void Stay();
+        NextMove Hit(Card card, Player player, Player nextPlayer);
+        NextMove Stay(Player player);
+        void DealHand(ref Player player);
+        Card ShowTopOfDeck();
     }
 }
