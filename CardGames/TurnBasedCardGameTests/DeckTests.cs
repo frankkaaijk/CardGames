@@ -3,7 +3,7 @@ using Xunit;
 using TurnBasedCardGame;
 using static TurnBasedCardGame.Deck;
 
-namespace TurnBasedCardGameTests
+namespace CardGameTests
 {
     public class DeckTests
     {
@@ -32,6 +32,20 @@ namespace TurnBasedCardGameTests
             Assert.Equal(4, deck.DealHand(4).Count);
             Assert.Equal(8, deck.DealHand(8).Count);
             Assert.Equal(42, deck.Cards.Count);
+            deck.Cards.Clear();
+            deck.AddCard(new Card(Card.Suits.Spades, Card.Values.Five));
+            Assert.Throws<InvalidOperationException>(()=>deck.DealHand(5));
+        }
+
+        [Fact]
+        public void AddCard()
+        {
+            var deck = new Deck(DeckType.Empty);
+            Assert.Empty(deck.Cards);
+            deck.AddCard(new Card(Card.Suits.Clubs, Card.Values.Jack));
+            Assert.Single(deck.Cards);
+            deck.AddCard(new Card(Card.Suits.Diamonds, Card.Values.Four));
+            Assert.Equal(2, deck.Cards.Count);            
         }
     }
 

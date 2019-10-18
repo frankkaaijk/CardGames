@@ -59,6 +59,11 @@ namespace TurnBasedCardGame
         {
             var hand = new List<Card>();
 
+            if( Cards.Count < numberOfCards)
+            {
+                throw new InvalidOperationException("Too few cards in deck");
+            }
+
             for (var i = 0; i < numberOfCards; i++)
             {
                 hand.Add(Cards.Pop());
@@ -85,6 +90,17 @@ namespace TurnBasedCardGame
                     }
                 }
             }
+        }
+
+        public void FillDeck(Deck deck)
+        {
+            Cards.Clear();
+            Cards.CopyTo(deck.Cards.ToArray(), 0);
+        }
+
+        public void Clear()
+        {
+            Cards.Clear();
         }
 
         public Card GetTopCard()

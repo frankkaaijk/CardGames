@@ -2,12 +2,12 @@
 using TurnBasedCardGame;
 using Xunit;
 
-namespace TurnBasedCardGameTests
+namespace CardGameTests
 {
-    public class TurnBasedCardGameTests
+    public class CardGameTests
     {
         private CardGame Game;
-        public TurnBasedCardGameTests()
+        public CardGameTests()
         {
             var crazyEightGame = new SheddingCardGames.CrazyEightGame();
             Game = new CardGame(crazyEightGame);
@@ -37,7 +37,9 @@ namespace TurnBasedCardGameTests
             Game.StartGame();
             Assert.Throws<FormatException>(() => Game.Hit("Hearts of King"));
             Game.Hit("King of Hearts");
-            Assert.NotNull(Game.ShowLastPlayedCard());
+            Assert.Equal("King of Hearts", Game.ShowLastPlayedCard());
+            Game.Hit("qUEEN of hEARTS");
+            Assert.Equal("Queen of Hearts", Game.ShowLastPlayedCard());
         }
 
         [Fact]

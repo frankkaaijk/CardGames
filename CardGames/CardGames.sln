@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurnBasedCardGame", "TurnBasedCardGame\TurnBasedCardGame.csproj", "{B08AE8AA-A108-4BC6-A85C-F000A1C686EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurnBasedCardGameTests", "TurnBasedCardGameTests\TurnBasedCardGameTests.csproj", "{A8169F8F-4288-4334-AD91-92DD016CC7D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardGameTests", "TurnBasedCardGameTests\CardGameTests.csproj", "{A8169F8F-4288-4334-AD91-92DD016CC7D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyEightsConsole", "CrazyEightsConsole\CrazyEightsConsole.csproj", "{41BD3859-9512-4B78-825B-27F74DFDA0F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrazyEightGame", "CrazyEightGame\CrazyEightGame.csproj", "{E8A37006-29D0-4021-805E-1BB522A4D29D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrazyEightGame", "CrazyEightGame\CrazyEightGame.csproj", "{E8A37006-29D0-4021-805E-1BB522A4D29D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

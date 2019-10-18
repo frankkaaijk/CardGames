@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("TurnBasedCardGameTests")]
+[assembly: InternalsVisibleTo("CardGameTests")]
 namespace TurnBasedCardGame
 {
     public enum NextMove
@@ -11,7 +11,8 @@ namespace TurnBasedCardGame
         CurrentPlayer,
         NextPlayer,
         SkipNextPlayer,
-        ReservePlayOrder
+        ReservePlayOrder,
+        GameWon
     }
     public class CardGame
     {
@@ -86,12 +87,13 @@ namespace TurnBasedCardGame
                 throw new FormatException("Invalid (unknown) card");
             }
 
-            var nextMove = TypeOfCardgame.Hit(cardToPlay, CurrentPlayer, GetNextPlayer());
+            var nextPlayer = GetNextPlayer();
+            var nextMove = TypeOfCardgame.Hit(cardToPlay, ref CurrentPlayer, ref nextPlayer);
             ProgressPlay(nextMove);
         }
         public void Stay()
         {
-            TypeOfCardgame.Stay(CurrentPlayer);
+            TypeOfCardgame.Stay(ref CurrentPlayer);
             ProgressPlay(NextMove.NextPlayer);
         }
 
@@ -104,6 +106,7 @@ namespace TurnBasedCardGame
                         var currentDirection = DirectionOfPlay;
                         DirectionOfPlay = currentDirection ==
                             PlayDirection.Clockwise ? PlayDirection.CounterClockwise : PlayDirection.Clockwise;
+                        CurrentPlayer = GetNextPlayer();
                         break;
                     }
                 case NextMove.CurrentPlayer:
@@ -120,6 +123,11 @@ namespace TurnBasedCardGame
                     {
                         CurrentPlayer = GetNextPlayer();
                         CurrentPlayer = GetNextPlayer();
+                        break;
+                    }
+                case NextMove.GameWon:
+                    {
+                        GameInProgress = false;
                         break;
                     }
                 default:

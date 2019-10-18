@@ -38,35 +38,56 @@ namespace SheddingCardGames
             player.GiveHand(PlayDeck.DealHand(4));
         }
 
-        public NextMove Hit(Card card, Player player, Player nextPlayer)
+        public NextMove Hit(Card card, ref Player player, ref Player nextPlayer)
         {
-            var nextMove = NextMove.NextPlayer;
+            // Don't move the game forward on an invalid hit (invalid/unknown card)
+            var nextMove = NextMove.CurrentPlayer;
+
+            if (!player.HasCard(card))
+            {
+                return nextMove;
+            }
+
             if (SameSuitOrValueRule(player, card))
             {
                 nextMove = EvaluateSpecialCards(player, nextPlayer, card);
             }
-            EvaluateGame();
+            if (EvaluateGame(player))
+            {
+                nextMove = NextMove.GameWon;
+            }
             return nextMove;
         }
 
-        public NextMove Stay(Player player)
+        public NextMove Stay(ref Player player)
         {
-            player.AddCardToHand(PlayDeck.DealHand(1).First());
-            EvaluateGame();
+            try
+            {
+                player.AddCardToHand(PlayDeck.DealHand(1).First());
+            }
+            catch (InvalidOperationException)
+            {
+                // not enough cards in the play deck
+                // save the top card from the discard deck
+                var topCard = DiscardDeck.GetTopCard();
+
+                // Copy the discard deck to the playdeck and shuffle
+                PlayDeck.FillDeck(DiscardDeck);
+                PlayDeck.Shuffle();
+
+                // Clear discarddeck
+                DiscardDeck.Clear();
+            }
+            // EvaluateGame(player); (not necessary, card was just dealt)
             return NextMove.NextPlayer;
         }
 
-        private bool EvaluateGame()
+        private bool EvaluateGame(Player player)
         {
-            /*&foreach (var player in Players)
+            if (player.ShowHand() == string.Empty)
             {
-                if (player.Hand.Count == 0)
-                {
-                    // Game is won!
-                    GameInProgress = false;
-                    return true;
-                }
-            }*/
+                return true;
+            }
             return false;
         }
 
@@ -75,7 +96,8 @@ namespace SheddingCardGames
             // Card is a Joker or of same value or same suit 
             if (cardToPlay.Suit == Card.Suits.Jokers ||
                 (DiscardDeck.GetTopCard().Suit == cardToPlay.Suit ||
-                 DiscardDeck.GetTopCard().Value == cardToPlay.Value))
+                 DiscardDeck.GetTopCard().Value == cardToPlay.Value || 
+                 DiscardDeck.GetTopCard().Suit == Card.Suits.Jokers))
             {
                 DiscardDeck.AddCard(cardToPlay);
                 player.RemoveCardFromHand(cardToPlay);
@@ -86,10 +108,20 @@ namespace SheddingCardGames
 
         private NextMove EvaluateSpecialCards(Player player, Player nextPlayer, Card cardToPlay)
         {
+            if (Card.Suits.Jokers == cardToPlay.Suit)
+            {
+                nextPlayer.AddCardsToHand(PlayDeck.DealHand(5));
+                return NextMove.NextPlayer;
+            }
+
             // Either the suit or value was correct so let's see if the card was a special one
             // Value of 2?
             switch (cardToPlay.Value)
             {
+                case (Card.Values)SpecialValues.Ace:
+                    {
+                        return NextMove.ReservePlayOrder;
+                    }
                 case (Card.Values)SpecialValues.Two:
                     {
                         nextPlayer.AddCardsToHand(PlayDeck.DealHand(2));

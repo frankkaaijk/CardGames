@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace TurnBasedCardGame
 {
     public class Player : IEquatable<object>
     {
-        public List<Card> Hand { get; set; }
+        internal List<Card> Hand { get; set; }
         public string Name { get; } = string.Empty;
 
         public Player(string name)
@@ -35,6 +34,10 @@ namespace TurnBasedCardGame
                 throw new InvalidOperationException("No such card in the players hand");
             }
 
+        }
+        public bool HasCard(Card card)
+        {
+            return Hand.Contains(card);
         }
         public void AddCardToHand(Card card)
         {

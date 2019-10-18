@@ -4,7 +4,7 @@ using Xunit;
 using static TurnBasedCardGame.Card;
 using static TurnBasedCardGame.Deck;
 
-namespace TurnBasedCardGameTests
+namespace CardGameTests
 {
     public class PlayerTests 
     {

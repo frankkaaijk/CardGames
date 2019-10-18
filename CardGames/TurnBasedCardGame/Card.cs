@@ -60,6 +60,14 @@ namespace TurnBasedCardGame
             Suits cardSuit;
             Values cardValue;
 
+            // Jokers are the odd one out, they 
+            if ("joker" == matches[0].ToLower())
+            {
+                card = new Card(Suits.Jokers, Values.Ace);
+                return true;
+            }
+            
+
             if( Enum.TryParse(matches[0], true, out cardValue) && 
                 Enum.TryParse(matches[1], true, out cardSuit))
             {
