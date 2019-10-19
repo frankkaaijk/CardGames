@@ -8,7 +8,7 @@ namespace CardGameTests
         [Theory]
         [InlineData("King of Hearts")]
         [InlineData("kING oF heArts")]
-        [InlineData("jOKER")]
+        [InlineData("jOKERs")]
         [InlineData("Queen of CLubs")]
         [InlineData("Jack of Spades")]
         public void ParseValid(string cardString)

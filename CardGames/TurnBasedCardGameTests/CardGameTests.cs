@@ -33,13 +33,14 @@ namespace CardGameTests
         public void Hit()
         {
             Game.AddPlayer("Test1");
+            Game.AddPlayer("Test2");
             Assert.Throws<InvalidOperationException>(() => Game.Hit("King of Hearts"));
             Game.StartGame();
             Assert.Throws<FormatException>(() => Game.Hit("Hearts of King"));
-            Game.Hit("King of Hearts");
-            Assert.Equal("King of Hearts", Game.ShowLastPlayedCard());
-            Game.Hit("qUEEN of hEARTS");
-            Assert.Equal("Queen of Hearts", Game.ShowLastPlayedCard());
+            var cardsOfPlayer = Game.ShowPlayersHand("Test1");
+            var cardToPlay = cardsOfPlayer.Substring(0, cardsOfPlayer.IndexOf(Environment.NewLine));
+            Game.Hit(cardToPlay);
+            Assert.Equal(cardToPlay, Game.ShowLastPlayedCard());           
         }
 
         [Fact]
@@ -55,12 +56,10 @@ namespace CardGameTests
             Game.ProgressPlay(NextMove.NextPlayer);
             Assert.Equal("Test3", Game.ShowCurrentPlayer());
             Game.ProgressPlay(NextMove.ReservePlayOrder);
-            Game.ProgressPlay(NextMove.NextPlayer);
             Assert.Equal("Test2", Game.ShowCurrentPlayer());
             Game.ProgressPlay(NextMove.CurrentPlayer);
             Assert.Equal("Test2", Game.ShowCurrentPlayer());
             Game.ProgressPlay(NextMove.ReservePlayOrder);
-            Game.ProgressPlay(NextMove.NextPlayer);
             Assert.Equal("Test3", Game.ShowCurrentPlayer());
             Game.ProgressPlay(NextMove.NextPlayer);
             Assert.Equal("Test1", Game.ShowCurrentPlayer());

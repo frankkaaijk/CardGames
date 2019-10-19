@@ -1,8 +1,19 @@
 ﻿using System;
 using TurnBasedCardGame;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CrazyEightsConsole
 {
+    public static class CollectionExtensions
+    {
+        public static string MyToString<TKey, TValue> (this Dictionary<TKey, TValue> dict)
+        {
+            return string.Join(Environment.NewLine ,dict.Select(kv => kv.Key + ") " + kv.Value).ToArray());
+        }
+
+    }
     class Program
     {
         static void Main(string[] args)
@@ -22,19 +33,18 @@ namespace CrazyEightsConsole
             while (true)
             {
                 string currentPlayer = crazyEightsGame.ShowCurrentPlayer();
-                Console.WriteLine(crazyEightsGame.ShowPlayersHand(currentPlayer));
-                Console.WriteLine ("Hit (1) or Stay (2)?");
-                int play;
+                Console.WriteLine(currentPlayer + " has: ");
+                var cards = CardSelection(crazyEightsGame);
+                Console.WriteLine(cards.MyToString());
+                Console.WriteLine("Hit (1 to 9) or Stay (0)?");
+                int play = 0;
                 int.TryParse(Console.ReadLine(), out play);
-                if (play == 1)
-                {
-                    Console.Write("Card to play:");
-                    crazyEightsGame.Hit(Console.ReadLine());
-                }
-                else if (play == 2)
+                if (play == 0)
                 {
                     crazyEightsGame.Stay();
+                    continue;
                 }
+                crazyEightsGame.Hit(cards[play]);
 
                 Console.WriteLine("Continue Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());
             }
@@ -44,7 +54,7 @@ namespace CrazyEightsConsole
         {
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                var inputString = String.Format("Name player name {0}:", i+1);
+                var inputString = String.Format("Name player name {0}:", i + 1);
                 Console.Write(inputString);
                 var playerName = Console.ReadLine();
                 while (false == cardGame.AddPlayer(playerName))
@@ -54,6 +64,22 @@ namespace CrazyEightsConsole
                     playerName = Console.ReadLine();
                 }
             }
+        }
+
+        private static Dictionary<int, string> CardSelection(CardGame crazyEightsGame)
+        {
+            var cards = crazyEightsGame.ShowPlayersHand(crazyEightsGame.ShowCurrentPlayer());
+            var expr = Environment.NewLine;
+            var splitCards = Regex.Split(cards, expr);
+            var myCards = new Dictionary<int, string>();
+
+            int cardCounter = 0;
+
+            foreach (var card in splitCards)
+            {   
+                myCards.Add(++cardCounter, card);
+            }
+            return myCards;
         }
     }
 }

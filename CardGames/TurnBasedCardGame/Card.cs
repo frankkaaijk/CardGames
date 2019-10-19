@@ -43,13 +43,11 @@ namespace TurnBasedCardGame
         {
             if( Suit == Suits.Jokers )
             {
-                return $"{Enum.GetName(typeof(Card.Suits), Suit)}" +
-                System.Environment.NewLine;
+                return $"{Enum.GetName(typeof(Card.Suits), Suit)}";
             }
 
             return $"{Enum.GetName(typeof(Card.Values), Value)} of " +
-                $"{Enum.GetName(typeof(Card.Suits), Suit)}" +
-                System.Environment.NewLine;
+                $"{Enum.GetName(typeof(Card.Suits), Suit)}";
         }
 
         public static bool TryParse(string stringToParse, out Card card)
@@ -61,7 +59,7 @@ namespace TurnBasedCardGame
             Values cardValue;
 
             // Jokers are the odd one out, they 
-            if ("joker" == matches[0].ToLower())
+            if ("jokers" == matches[0].ToLower())
             {
                 card = new Card(Suits.Jokers, Values.Ace);
                 return true;

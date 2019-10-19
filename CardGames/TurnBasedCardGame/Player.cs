@@ -20,12 +20,14 @@ namespace TurnBasedCardGame
         public string ShowHand()
         {
             var playerHand = string.Empty;
-            foreach (Card card in Hand)
-            {
-                playerHand += card.ToString();
-            }
+            List<string> cardsInHand = new List<string>();
 
-            return $"{Name} has:" + Environment.NewLine + playerHand;
+            foreach (var card in Hand)
+            {
+                cardsInHand.Add(card.ToString());                
+            }
+                        
+            return string.Join(Environment.NewLine, cardsInHand);
         }
         public void RemoveCardFromHand(Card card)
         {
