@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using TurnBasedCardGame;
+using CardGames;
 using System.Collections.Generic;
 
 namespace SheddingCardGames
 {
-    public class CrazyEightGame : ICardGame
+    public class CrazyEightsGame : ICardGame
     {
         internal enum SpecialValues
         {
@@ -22,7 +22,7 @@ namespace SheddingCardGames
         internal Deck PlayDeck = new Deck(Deck.DeckType.FrenchIncludingJokers);
         internal Deck DiscardDeck = new Deck(Deck.DeckType.Empty);
 
-        public CrazyEightGame()
+        public CrazyEightsGame()
         {
             PlayDeck.Shuffle();
             DiscardDeck.AddCard(PlayDeck.DealHand(1).First()); // First card to play with         
@@ -43,7 +43,7 @@ namespace SheddingCardGames
             // Don't move the game forward on an invalid hit (invalid/unknown card)
             var nextMove = NextMove.CurrentPlayer;
 
-            if (!player.HasCard(card))
+            if (!player.HandHasCard(card))
             {
                 return nextMove;
             }
@@ -63,7 +63,7 @@ namespace SheddingCardGames
         {
             try
             {
-                player.AddCardToHand(PlayDeck.DealHand(1).First());
+                player.AddToHand(PlayDeck.DealHand(1).First());
             }
             catch (InvalidOperationException)
             {
@@ -77,6 +77,7 @@ namespace SheddingCardGames
 
                 // Clear discarddeck
                 DiscardDeck.Clear();
+                DiscardDeck.AddCard(topCard);
             }
             // EvaluateGame(player); (not necessary, card was just dealt)
             return NextMove.NextPlayer;
@@ -100,7 +101,7 @@ namespace SheddingCardGames
                  DiscardDeck.GetTopCard().Suit == Card.Suits.Jokers))
             {
                 DiscardDeck.AddCard(cardToPlay);
-                player.RemoveCardFromHand(cardToPlay);
+                player.RemoveFromHand(cardToPlay);
                 return true;
             }
             return false;
@@ -110,7 +111,7 @@ namespace SheddingCardGames
         {
             if (Card.Suits.Jokers == cardToPlay.Suit)
             {
-                nextPlayer.AddCardsToHand(PlayDeck.DealHand(5));
+                nextPlayer.AddToHand(PlayDeck.DealHand(5));
                 return NextMove.NextPlayer;
             }
 
@@ -124,7 +125,7 @@ namespace SheddingCardGames
                     }
                 case (Card.Values)SpecialValues.Two:
                     {
-                        nextPlayer.AddCardsToHand(PlayDeck.DealHand(2));
+                        nextPlayer.AddToHand(PlayDeck.DealHand(2));
                         return NextMove.NextPlayer;
                     }
                 case (Card.Values)SpecialValues.Seven:

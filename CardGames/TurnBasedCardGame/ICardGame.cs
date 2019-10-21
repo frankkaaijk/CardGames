@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TurnBasedCardGame
+namespace CardGames
 {
     public interface ICardGame
     {

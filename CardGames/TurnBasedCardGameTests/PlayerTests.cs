@@ -1,8 +1,8 @@
 ﻿using System;
-using TurnBasedCardGame;
+using CardGames;
 using Xunit;
-using static TurnBasedCardGame.Card;
-using static TurnBasedCardGame.Deck;
+using static CardGames.Card;
+using static CardGames.Deck;
 
 namespace CardGameTests
 {
@@ -46,12 +46,12 @@ namespace CardGameTests
         public void RemoveFromHand()
         {
             // Remove unknown card
-            Assert.Throws<InvalidOperationException>(()=>player1.RemoveCardFromHand(new Card(Suits.Diamonds, Values.Queen)));
-            player1.RemoveCardFromHand(new Card(Suits.Clubs, Values.King));
+            Assert.Throws<InvalidOperationException>(()=>player1.RemoveFromHand(new Card(Suits.Diamonds, Values.Queen)));
+            player1.RemoveFromHand(new Card(Suits.Clubs, Values.King));
             Assert.DoesNotContain(new Card(Suits.Clubs, Values.King), player1.Hand);
             Assert.True(3 == player1.Hand.Count);
                         
-            player2.RemoveCardFromHand(new Card(Suits.Clubs, Values.Eight));
+            player2.RemoveFromHand(new Card(Suits.Clubs, Values.Eight));
             Assert.DoesNotContain(new Card(Suits.Clubs, Values.Eight), player1.Hand);
             Assert.True(7 == player2.Hand.Count);
         }
@@ -59,11 +59,11 @@ namespace CardGameTests
         [Fact]
         public void AddCardToHand()
         {
-            player1.AddCardToHand(new Card(Suits.Diamonds, Values.Three));
+            player1.AddToHand(new Card(Suits.Diamonds, Values.Three));
             Assert.Contains(new Card(Suits.Diamonds, Values.Three), player1.Hand);
             Assert.True(5 == player1.Hand.Count);
 
-            player2.AddCardToHand(new Card(Suits.Clubs, Values.Five));
+            player2.AddToHand(new Card(Suits.Clubs, Values.Five));
             Assert.Contains(new Card(Suits.Clubs, Values.Five), player2.Hand);
             Assert.True(9 == player2.Hand.Count);
         }

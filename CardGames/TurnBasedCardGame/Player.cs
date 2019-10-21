@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TurnBasedCardGame
+namespace CardGames
 {
     public class Player : IEquatable<object>
     {
@@ -17,6 +17,7 @@ namespace TurnBasedCardGame
         {
             Hand = cards;
         }
+
         public string ShowHand()
         {
             var playerHand = string.Empty;
@@ -29,7 +30,7 @@ namespace TurnBasedCardGame
                         
             return string.Join(Environment.NewLine, cardsInHand);
         }
-        public void RemoveCardFromHand(Card card)
+        public void RemoveFromHand(Card card)
         {
             if(!Hand.Remove(card))
             {
@@ -37,20 +38,20 @@ namespace TurnBasedCardGame
             }
 
         }
-        public bool HasCard(Card card)
+        public bool HandHasCard(Card card)
         {
             return Hand.Contains(card);
         }
-        public void AddCardToHand(Card card)
+        public void AddToHand(Card card)
         {
             Hand.Add(card);
         }
 
-        public void AddCardsToHand(List<Card> cards)
+        public void AddToHand(List<Card> cards)
         {
             foreach(var card in cards)
             {
-                AddCardToHand(card);
+                AddToHand(card);
             }
         }
 

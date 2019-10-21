@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CrazyEightGame\CrazyEightGame.csproj" />
-    <ProjectReference Include="..\TurnBasedCardGame\TurnBasedCardGame.csproj" />
+    <ProjectReference Include="..\CrazyEightGame\CrazyEightsGame.csproj" />
+    <ProjectReference Include="..\TurnBasedCardGame\CardGame.csproj" />
   </ItemGroup>
 
 </Project>

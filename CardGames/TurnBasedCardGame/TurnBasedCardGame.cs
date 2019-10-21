@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("CardGameTests")]
-namespace TurnBasedCardGame
+namespace CardGames
 {
     public enum NextMove
     {
@@ -14,7 +14,7 @@ namespace TurnBasedCardGame
         ReservePlayOrder,
         GameWon
     }
-    public class CardGame
+    public class TurnbasedCardGame
     {
         internal LinkedList<Player> Players = new LinkedList<Player>();
         internal Player CurrentPlayer;
@@ -28,7 +28,7 @@ namespace TurnBasedCardGame
             CounterClockwise
         }
 
-        public CardGame(ICardGame cardgame)
+        public TurnbasedCardGame(ICardGame cardgame)
         {
             TypeOfCardgame = cardgame;
         }

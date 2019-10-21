@@ -1,4 +1,4 @@
-﻿using TurnBasedCardGame;
+﻿using CardGames;
 using Xunit;
 
 namespace CardGameTests

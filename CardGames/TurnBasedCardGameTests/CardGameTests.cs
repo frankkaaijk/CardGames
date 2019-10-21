@@ -1,16 +1,16 @@
 ﻿using System;
-using TurnBasedCardGame;
+using CardGames;
 using Xunit;
 
 namespace CardGameTests
 {
     public class CardGameTests
     {
-        private CardGame Game;
+        private CardGames.TurnbasedCardGame Game;
         public CardGameTests()
         {
-            var crazyEightGame = new SheddingCardGames.CrazyEightGame();
-            Game = new CardGame(crazyEightGame);
+            var crazyEightGame = new SheddingCardGames.CrazyEightsGame();
+            Game = new CardGames.TurnbasedCardGame(crazyEightGame);
         }
 
         [Fact]
@@ -26,21 +26,7 @@ namespace CardGameTests
         [Fact]
         public void StartGame()
         {
-            Assert.NotNull(Game.ShowLastPlayedCard());           
-        }
-
-        [Fact]
-        public void Hit()
-        {
-            Game.AddPlayer("Test1");
-            Game.AddPlayer("Test2");
-            Assert.Throws<InvalidOperationException>(() => Game.Hit("King of Hearts"));
-            Game.StartGame();
-            Assert.Throws<FormatException>(() => Game.Hit("Hearts of King"));
-            var cardsOfPlayer = Game.ShowPlayersHand("Test1");
-            var cardToPlay = cardsOfPlayer.Substring(0, cardsOfPlayer.IndexOf(Environment.NewLine));
-            Game.Hit(cardToPlay);
-            Assert.Equal(cardToPlay, Game.ShowLastPlayedCard());           
+            Assert.NotNull(Game.ShowLastPlayedCard());
         }
 
         [Fact]

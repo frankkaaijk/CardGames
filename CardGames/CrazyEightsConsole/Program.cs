@@ -1,5 +1,5 @@
 ﻿using System;
-using TurnBasedCardGame;
+using CardGames;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +23,9 @@ namespace CrazyEightsConsole
             Console.Write("How many players?");
             Int32.TryParse(Console.ReadLine(), out var numberOfPlayers);
 
-            var crazyEightGame = new SheddingCardGames.CrazyEightGame();
+            var crazyEightGame = new SheddingCardGames.CrazyEightsGame();
 
-            var crazyEightsGame = new CardGame(crazyEightGame);
+            var crazyEightsGame = new CardGames.TurnbasedCardGame(crazyEightGame);
             SetupPlayers(crazyEightsGame, numberOfPlayers);
             crazyEightsGame.StartGame();
             Console.WriteLine("Begin Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());
@@ -50,7 +50,7 @@ namespace CrazyEightsConsole
             }
         }
 
-        private static void SetupPlayers(CardGame cardGame, int numberOfPlayers)
+        private static void SetupPlayers(CardGames.TurnbasedCardGame cardGame, int numberOfPlayers)
         {
             for (int i = 0; i < numberOfPlayers; i++)
             {
@@ -66,7 +66,7 @@ namespace CrazyEightsConsole
             }
         }
 
-        private static Dictionary<int, string> CardSelection(CardGame crazyEightsGame)
+        private static Dictionary<int, string> CardSelection(CardGames.TurnbasedCardGame crazyEightsGame)
         {
             var cards = crazyEightsGame.ShowPlayersHand(crazyEightsGame.ShowCurrentPlayer());
             var expr = Environment.NewLine;

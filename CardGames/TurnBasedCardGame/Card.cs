@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace TurnBasedCardGame
+namespace CardGames
 {
     public class Card : IEquatable<object>   
     {

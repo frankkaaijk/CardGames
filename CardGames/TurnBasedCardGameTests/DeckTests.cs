@@ -1,7 +1,7 @@
 using System;
 using Xunit;
-using TurnBasedCardGame;
-using static TurnBasedCardGame.Deck;
+using CardGames;
+using static CardGames.Deck;
 
 namespace CardGameTests
 {
