@@ -6,11 +6,11 @@ namespace CardGameTests
 {
     public class CardGameTests
     {
-        private CardGames.TurnbasedCardGame Game;
+        private CardGames.CardGame Game;
         public CardGameTests()
         {
             var crazyEightGame = new SheddingCardGames.CrazyEightsGame();
-            Game = new CardGames.TurnbasedCardGame(crazyEightGame);
+            Game = new CardGames.CardGame(crazyEightGame);
         }
 
         [Fact]
@@ -18,9 +18,7 @@ namespace CardGameTests
         {
             Assert.True(Game.AddPlayer("Test"));
             Assert.False(Game.AddPlayer("Test"));
-            Assert.True(Game.AddPlayer("Test2"));
-            Game.StartGame();
-            Assert.Throws<InvalidOperationException>(() => Game.AddPlayer("Test3"));
+            Assert.True(Game.AddPlayer("Test2"));            
         }
 
         [Fact]

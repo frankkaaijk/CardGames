@@ -25,7 +25,7 @@ namespace CrazyEightsConsole
 
             var crazyEightGame = new SheddingCardGames.CrazyEightsGame();
 
-            var crazyEightsGame = new CardGames.TurnbasedCardGame(crazyEightGame);
+            var crazyEightsGame = new CardGames.CardGame(crazyEightGame);
             SetupPlayers(crazyEightsGame, numberOfPlayers);
             crazyEightsGame.StartGame();
             Console.WriteLine("Begin Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());
@@ -50,7 +50,7 @@ namespace CrazyEightsConsole
             }
         }
 
-        private static void SetupPlayers(CardGames.TurnbasedCardGame cardGame, int numberOfPlayers)
+        private static void SetupPlayers(CardGames.CardGame cardGame, int numberOfPlayers)
         {
             for (int i = 0; i < numberOfPlayers; i++)
             {
@@ -66,7 +66,7 @@ namespace CrazyEightsConsole
             }
         }
 
-        private static Dictionary<int, string> CardSelection(CardGames.TurnbasedCardGame crazyEightsGame)
+        private static Dictionary<int, string> CardSelection(CardGames.CardGame crazyEightsGame)
         {
             var cards = crazyEightsGame.ShowPlayersHand(crazyEightsGame.ShowCurrentPlayer());
             var expr = Environment.NewLine;

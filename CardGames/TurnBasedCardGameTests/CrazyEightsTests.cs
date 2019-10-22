@@ -12,7 +12,7 @@ namespace CardGameTests
         [Fact]
         public void HitTest()
         {
-            var crazyEightsGame = new CrazyEightsGame();
+            var crazyEightsGame = new SheddingCardGames.CrazyEightsGame();
             var player1 = new Player("Test1");
             var topCard = crazyEightsGame.ShowTopOfDeck();
             player1.GiveHand(new List<Card> {
@@ -33,7 +33,7 @@ namespace CardGameTests
         [Fact]
         public void StayTest()
         {
-            var crazyEightsGame = new CrazyEightsGame();
+            var crazyEightsGame = new SheddingCardGames.CrazyEightsGame();
             var player1 = new Player("Test1");
             player1.GiveHand(new List<Card> { new Card(Card.Suits.Clubs, Card.Values.Eight), new Card(Card.Suits.Hearts, Card.Values.Two) });
 
@@ -41,6 +41,21 @@ namespace CardGameTests
             Assert.True(NextMove.NextPlayer == result);
             var count = player1.ShowHand().Split(Environment.NewLine).Length;
             Assert.True(3 == count);
+        }
+
+        [Fact]
+        public void StateWonTest()
+        {
+            var crazyEightsGame = new SheddingCardGames.CrazyEightsGame();
+            crazyEightsGame.SetState(GameStates.Won);
+            var player1 = new Player("Test1");
+            var player2 = new Player("Test2");
+            Assert.Throws<NotSupportedException>(() => crazyEightsGame.Stay(ref player1));
+            Assert.Throws<NotSupportedException>(() => crazyEightsGame.Hit(null, ref player1, ref player2));
+            Assert.Throws<NotSupportedException>(() => crazyEightsGame.ShowTopOfDeck());
+            Assert.Throws<NotSupportedException>(() => crazyEightsGame.DealHand());
+
+            Assert.Throws<NotSupportedException>(() => crazyEightsGame.SetState(GameStates.Playing));
         }
     }
 }

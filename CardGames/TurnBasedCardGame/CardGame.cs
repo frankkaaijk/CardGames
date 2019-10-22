@@ -14,12 +14,11 @@ namespace CardGames
         ReservePlayOrder,
         GameWon
     }
-    public class TurnbasedCardGame
+    public class CardGame
     {
         internal LinkedList<Player> Players = new LinkedList<Player>();
         internal Player CurrentPlayer;
-        internal bool GameInProgress = false;   // state pattern?
-        internal ICardGame TypeOfCardgame;
+        internal ICardGameCommands TypeOfCardgame;
         internal PlayDirection DirectionOfPlay = PlayDirection.Clockwise;
 
         internal enum PlayDirection
@@ -28,17 +27,13 @@ namespace CardGames
             CounterClockwise
         }
 
-        public TurnbasedCardGame(ICardGame cardgame)
+        public CardGame(ICardGameCommands cardgame)
         {
             TypeOfCardgame = cardgame;
         }
 
         public bool AddPlayer(string playername)
         {
-            if (GameInProgress)
-            {
-                throw new InvalidOperationException("Game already in progress");
-            }
             foreach (var player in Players)
             {
                 if (player.Name == playername)
@@ -48,7 +43,7 @@ namespace CardGames
             }
 
             var newPlayer = new Player(playername);
-            TypeOfCardgame.DealHand(ref newPlayer);
+            //newPlayer.GiveHand(TypeOfCardgame.DealHand());
             Players.AddLast(newPlayer);
 
             return true;
@@ -70,17 +65,16 @@ namespace CardGames
 
         public void StartGame()
         {
-            GameInProgress = true;
+            foreach(var player in Players)
+            {
+                player.GiveHand(TypeOfCardgame.DealHand());
+            }
+            TypeOfCardgame.SetState(GameStates.Playing);
             CurrentPlayer = Players.First();
         }
 
         public void Hit(string cardString)
         {
-            if (!GameInProgress)
-            {
-                throw new InvalidOperationException("Game not in progress");
-            }
-
             Card cardToPlay;
             if (!Card.TryParse(cardString, out cardToPlay))
             {
@@ -127,7 +121,7 @@ namespace CardGames
                     }
                 case NextMove.GameWon:
                     {
-                        GameInProgress = false;
+                        TypeOfCardgame.SetState(GameStates.Won);
                         break;
                     }
                 default:
