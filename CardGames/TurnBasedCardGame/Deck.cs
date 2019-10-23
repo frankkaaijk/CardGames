@@ -1,15 +1,29 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using log4net;
 
 namespace CardGames
 {
+    public static class DeckExtensions
+    {
+        public static Stack<T> Clone<T>(this Stack<T> oldStack)
+        {
+            Contract.Requires(oldStack != null);
+            return new Stack<T>(new Stack<T>(oldStack));
+        }
+    }
+
     public class Deck : IEquatable<object>
     {
+        private static readonly ILog log =
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public enum DeckType
         {
-            Empty,            
+            Empty,
             French,
             FrenchIncludingJokers
         }
@@ -30,6 +44,7 @@ namespace CardGames
 
         private void Initialize(DeckType deckType)
         {
+            log.Debug($"Deck initialisation with {deckType.ToString()}");
             switch (deckType)
             {
                 case DeckType.Empty:
@@ -53,12 +68,14 @@ namespace CardGames
             Cards.Clear();
             foreach (var card in cards.OrderBy(c => random.Next()))
                 Cards.Push(card);
+
+            log.Debug($"Deck shuffled");
         }
         public List<Card> DealHand(int numberOfCards)
         {
             var hand = new List<Card>();
 
-            if( Cards.Count < numberOfCards)
+            if (Cards.Count < numberOfCards)
             {
                 throw new InvalidOperationException("Too few cards in deck");
             }
@@ -71,6 +88,7 @@ namespace CardGames
         }
         public void AddCard(Card card)
         {
+            log.Debug($"{card.ToString()} added to deck");
             Cards.Push(card);
         }
         public Card TopOfDeck()
@@ -94,7 +112,7 @@ namespace CardGames
         public void FillDeck(Deck deck)
         {
             Cards.Clear();
-            Cards.CopyTo(deck.Cards.ToArray(), 0);
+            Cards = deck.Cards.Clone();
         }
 
         public void Clear()

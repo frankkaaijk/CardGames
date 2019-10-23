@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CardGames;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("CardGameTests")]
 namespace CrazyEightsGame.States
 {
     class CrazyEightsPlaying : ICardGameCommands
@@ -31,6 +33,15 @@ namespace CrazyEightsGame.States
         }
         public List<Card> DealHand()
         {
+            try
+            {
+                return PlayDeck.DealHand(4);
+            }
+            catch(InvalidOperationException)
+            {
+                ResetDecks();
+            }
+
             return PlayDeck.DealHand(4);
         }
 
@@ -62,24 +73,8 @@ namespace CrazyEightsGame.States
 
         public NextMove Stay(ref Player player)
         {
-            try
-            {
-                player.AddToHand(PlayDeck.DealHand(1).First());
-            }
-            catch (InvalidOperationException)
-            {
-                // not enough cards in the play deck
-                // save the top card from the discard deck
-                var topCard = DiscardDeck.GetTopCard();
-
-                // Copy the discard deck to the playdeck and shuffle
-                PlayDeck.FillDeck(DiscardDeck);
-                PlayDeck.Shuffle();
-
-                // Clear discarddeck
-                DiscardDeck.Clear();
-                DiscardDeck.AddCard(topCard);
-            }
+            player.AddToHand(PlayDeck.DealHand(1).First());
+            
             // EvaluateGame(player); (not necessary, card was just dealt)
             return NextMove.NextPlayer;
         }
@@ -161,6 +156,28 @@ namespace CrazyEightsGame.States
                 default:
                     return NextMove.NextPlayer;
             }
+        }
+
+        private void ResetDecks()
+        {
+            ResetPlayDeck();
+            ResetDiscardDeck();
+        }
+
+        private void ResetPlayDeck()
+        {
+            // not enough cards left in the play deck
+            // Copy the discard deck to the playdeck and shuffle
+            PlayDeck.FillDeck(DiscardDeck);
+            PlayDeck.Shuffle();
+        }
+        private void ResetDiscardDeck()
+        {
+            // save the top card from the discard deck
+            var topCard = DiscardDeck.GetTopCard();
+            // Clear discarddeck
+            DiscardDeck.Clear();
+            DiscardDeck.AddCard(topCard);
         }
     }
 }

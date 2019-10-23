@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using log4net;
 
 namespace CardGames
 {
     public class Card : IEquatable<object>   
     {
+        private static readonly ILog log = 
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public enum Suits
         {
             Hearts,
@@ -55,6 +59,14 @@ namespace CardGames
             var expr = @"\sof\s";
             var matches = Regex.Split(stringToParse, expr, RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 
+            var message = $"{stringToParse} parsed the following matches {matches[0]} ";
+            if (matches.Length > 1)
+            {
+                message += $"and {matches[1]}.";
+            }
+            log.Debug(message);
+            
+
             Suits cardSuit;
             Values cardValue;
 
@@ -64,7 +76,6 @@ namespace CardGames
                 card = new Card(Suits.Jokers, Values.Ace);
                 return true;
             }
-            
 
             if( Enum.TryParse(matches[0], true, out cardValue) && 
                 Enum.TryParse(matches[1], true, out cardSuit))

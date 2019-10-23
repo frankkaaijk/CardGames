@@ -28,10 +28,11 @@ namespace CrazyEightsConsole
             var crazyEightsGame = new CardGames.CardGame(crazyEightGame);
             SetupPlayers(crazyEightsGame, numberOfPlayers);
             crazyEightsGame.StartGame();
-            Console.WriteLine("Begin Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());
-
+            
             while (true)
             {
+                Console.WriteLine("Top of Crazy Eights deck: " + crazyEightsGame.ShowLastPlayedCard());
+
                 string currentPlayer = crazyEightsGame.ShowCurrentPlayer();
                 Console.WriteLine(currentPlayer + " has: ");
                 var cards = CardSelection(crazyEightsGame);
@@ -45,8 +46,6 @@ namespace CrazyEightsConsole
                     continue;
                 }
                 crazyEightsGame.Hit(cards[play]);
-
-                Console.WriteLine("Continue Crazy Eights with: " + crazyEightsGame.ShowLastPlayedCard());
             }
         }
 

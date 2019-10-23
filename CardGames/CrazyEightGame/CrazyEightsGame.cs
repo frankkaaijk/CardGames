@@ -1,8 +1,7 @@
-﻿using System;
-using CardGames;
-using System.Collections.Generic;
+﻿using CardGames;
 using CrazyEightsGame.States;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
 
 namespace SheddingCardGames
 {

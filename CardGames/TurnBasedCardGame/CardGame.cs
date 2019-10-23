@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using log4net;
 
 [assembly: InternalsVisibleTo("CardGameTests")]
 namespace CardGames
@@ -16,6 +17,9 @@ namespace CardGames
     }
     public class CardGame
     {
+        private static readonly ILog log =
+               LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         internal LinkedList<Player> Players = new LinkedList<Player>();
         internal Player CurrentPlayer;
         internal ICardGameCommands TypeOfCardgame;
@@ -43,7 +47,7 @@ namespace CardGames
             }
 
             var newPlayer = new Player(playername);
-            //newPlayer.GiveHand(TypeOfCardgame.DealHand());
+            log.Info($"Player {playername} add to game");
             Players.AddLast(newPlayer);
 
             return true;
@@ -65,7 +69,7 @@ namespace CardGames
 
         public void StartGame()
         {
-            foreach(var player in Players)
+            foreach (var player in Players)
             {
                 player.GiveHand(TypeOfCardgame.DealHand());
             }
@@ -84,6 +88,8 @@ namespace CardGames
             var nextPlayer = GetNextPlayer();
             var nextMove = TypeOfCardgame.Hit(cardToPlay, ref CurrentPlayer, ref nextPlayer);
             ProgressPlay(nextMove);
+
+            log.Info($"Player {CurrentPlayer.Name} hit game with {cardToPlay.ToString()} add to game");
         }
         public void Stay()
         {
@@ -101,6 +107,7 @@ namespace CardGames
                         DirectionOfPlay = currentDirection ==
                             PlayDirection.Clockwise ? PlayDirection.CounterClockwise : PlayDirection.Clockwise;
                         CurrentPlayer = GetNextPlayer();
+                        log.Info($"Play direction is {DirectionOfPlay.ToString()} ");
                         break;
                     }
                 case NextMove.CurrentPlayer:
@@ -111,22 +118,28 @@ namespace CardGames
                 case NextMove.NextPlayer:
                     {
                         CurrentPlayer = GetNextPlayer();
+                        log.Info($"Play moves to next player {CurrentPlayer.Name}");
                         break;
                     }
                 case NextMove.SkipNextPlayer:
                     {
                         CurrentPlayer = GetNextPlayer();
+                        log.Info($"Play moves to next player skipping {CurrentPlayer.Name}");
                         CurrentPlayer = GetNextPlayer();
+                        log.Info($"Play moves to next player {CurrentPlayer.Name}");
                         break;
                     }
                 case NextMove.GameWon:
                     {
                         TypeOfCardgame.SetState(GameStates.Won);
+                        log.Info($"Play is won");
                         break;
                     }
                 default:
                     {
-                        throw new IndexOutOfRangeException("Invalid NextMove");
+                        var message = $"Invalid game progression request. Value: {nextMove}";
+                        log.Error(message);
+                        throw new IndexOutOfRangeException(message);
                     }
             }
         }

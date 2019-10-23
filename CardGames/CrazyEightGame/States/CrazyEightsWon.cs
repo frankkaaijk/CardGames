@@ -1,7 +1,6 @@
-﻿using System;
+﻿using CardGames;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using CardGames;
 
 namespace CrazyEightsGame.States
 {
