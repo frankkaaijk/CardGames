@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 
@@ -50,11 +51,13 @@ namespace CrazyEightsGame
                 return;
             }            
 
-            if (CurrentPlayer-- < 0)
+            if ( --CurrentPlayer < 0)
             {
                 // First item in the list, start from the back
-                CurrentPlayer = Players.Count;
+                CurrentPlayer = Players.Count - 1;
             }
+
+            Debug.Assert(CurrentPlayer != -1);
         }
 
         public Player GetPlayer()

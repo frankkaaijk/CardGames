@@ -36,7 +36,7 @@ namespace CrazyEightsConsole
 
                 Player currentPlayer = crazyEightsPlayers.GetPlayer();
                 Console.WriteLine(currentPlayer.Name + " has: ");
-                var cards = CardSelection(currentPlayer, crazyEightsGame);
+                var cards = CardSelection(currentPlayer);
                 Console.WriteLine(cards.MyToString());
                 Console.WriteLine("Hit (1 to 9) or Stay (0)?");
                 int.TryParse(Console.ReadLine(), out var play);
@@ -45,7 +45,7 @@ namespace CrazyEightsConsole
                     crazyEightsGame.SkipTurn(crazyEightsPlayers.GetPlayer());
                     continue;
                 }
-                crazyEightsGame.TakeTurn(currentPlayer, currentPlayer.ShowHand().ElementAt(play));
+                crazyEightsGame.TakeTurn(currentPlayer, currentPlayer.ShowHand().ElementAt(play-1));
             }
         }
 
@@ -69,7 +69,7 @@ namespace CrazyEightsConsole
             }
         }
 
-        private static Dictionary<int, string> CardSelection(Player currentPlayer, CardGame.ICardGame crazyEightsGame)
+        private static Dictionary<int, string> CardSelection(Player currentPlayer)
         {
             var myCards = new Dictionary<int, string>();
 

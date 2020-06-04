@@ -84,7 +84,8 @@ namespace SheddingCardGames
         
         public void SkipTurn(Player player)
         {
-            throw new NotImplementedException();
+            Players.NextPlayer();
+            Players.GetPlayer().AddToHand(PlayDeck.DealHand(1));
         }
 
         private bool IsValidCard(Card cardToPlay)
@@ -111,6 +112,7 @@ namespace SheddingCardGames
                 case (Card.Values)SpecialValues.Ace:
                     {
                         Players.PlayDirection = Players.PlayDirection == PlayDirection.Clockwise ? PlayDirection.CounterClockWise : PlayDirection.Clockwise;
+                        Players.NextPlayer();
                         break;
                     }
                 case (Card.Values)SpecialValues.Two:
