@@ -3,6 +3,7 @@ using CardGames;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
+using CrazyEightsGame;
 
 namespace CrazyEightsConsole
 {
@@ -23,60 +24,60 @@ namespace CrazyEightsConsole
             Console.Write("How many players?");
             Int32.TryParse(Console.ReadLine(), out var numberOfPlayers);
 
-            var crazyEightGame = new SheddingCardGames.CrazyEightsGame();
+            var crazyEightsPlayers = new CrazyEightsPlayers();
+            SetupPlayers(crazyEightsPlayers, numberOfPlayers);
 
-            var crazyEightsGame = new CardGames.CardGame(crazyEightGame);
-            SetupPlayers(crazyEightsGame, numberOfPlayers);
-            crazyEightsGame.StartGame();
-            
+            var crazyEightsGame = new SheddingCardGames.CrazyEightsGame(crazyEightsPlayers);
+            crazyEightsGame.DealHands();
+                        
             while (true)
             {
-                Console.WriteLine("Top of Crazy Eights deck: " + crazyEightsGame.ShowLastPlayedCard());
+                Console.WriteLine("Top of Crazy Eights deck: " + crazyEightsGame.TopOfDeck());
 
-                string currentPlayer = crazyEightsGame.ShowCurrentPlayer();
-                Console.WriteLine(currentPlayer + " has: ");
-                var cards = CardSelection(crazyEightsGame);
+                Player currentPlayer = crazyEightsPlayers.GetPlayer();
+                Console.WriteLine(currentPlayer.Name + " has: ");
+                var cards = CardSelection(currentPlayer, crazyEightsGame);
                 Console.WriteLine(cards.MyToString());
                 Console.WriteLine("Hit (1 to 9) or Stay (0)?");
-                int play = 0;
-                int.TryParse(Console.ReadLine(), out play);
+                int.TryParse(Console.ReadLine(), out var play);
                 if (play == 0)
                 {
-                    crazyEightsGame.Stay();
+                    crazyEightsGame.SkipTurn(crazyEightsPlayers.GetPlayer());
                     continue;
                 }
-                crazyEightsGame.Hit(cards[play]);
+                crazyEightsGame.TakeTurn(currentPlayer, currentPlayer.ShowHand().ElementAt(play));
             }
         }
 
-        private static void SetupPlayers(CardGames.CardGame cardGame, int numberOfPlayers)
+        private static void SetupPlayers(CrazyEightsPlayers players, int numberOfPlayers)
         {
             for (int i = 0; i < numberOfPlayers; i++)
             {
                 var inputString = String.Format("Name player name {0}:", i + 1);
                 Console.Write(inputString);
                 var playerName = Console.ReadLine();
-                while (false == cardGame.AddPlayer(playerName))
+                try
                 {
-                    Console.WriteLine($"Player with name {playerName} already registered");
+                    players.AddPlayer(new Player(playerName));
+                }
+                catch( NotImplementedException ex)
+                {
+                    Console.WriteLine(ex.Message);
                     Console.Write(inputString);
                     playerName = Console.ReadLine();
                 }
             }
         }
 
-        private static Dictionary<int, string> CardSelection(CardGames.CardGame crazyEightsGame)
+        private static Dictionary<int, string> CardSelection(Player currentPlayer, CardGame.ICardGame crazyEightsGame)
         {
-            var cards = crazyEightsGame.ShowPlayersHand(crazyEightsGame.ShowCurrentPlayer());
-            var expr = Environment.NewLine;
-            var splitCards = Regex.Split(cards, expr);
             var myCards = new Dictionary<int, string>();
 
             int cardCounter = 0;
 
-            foreach (var card in splitCards)
+            foreach (var card in currentPlayer.ShowHand())
             {   
-                myCards.Add(++cardCounter, card);
+                myCards.Add(++cardCounter, card.ToString());
             }
             return myCards;
         }

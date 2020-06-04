@@ -18,18 +18,11 @@ namespace CardGames
             Hand = cards;
         }
 
-        public string ShowHand()
+        public List<Card> ShowHand()
         {
-            var playerHand = string.Empty;
-            List<string> cardsInHand = new List<string>();
-
-            foreach (var card in Hand)
-            {
-                cardsInHand.Add(card.ToString());                
-            }
-                        
-            return string.Join(Environment.NewLine, cardsInHand);
+            return Hand;            
         }
+
         public void RemoveFromHand(Card card)
         {
             if(!Hand.Remove(card))

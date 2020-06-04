@@ -6,7 +6,7 @@ namespace CardGameTests
 {
     public class CardGameTests
     {
-        private CardGames.CardGame Game;
+        private ICardGame Game;
         public CardGameTests()
         {
             var crazyEightGame = new SheddingCardGames.CrazyEightsGame();
