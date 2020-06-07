@@ -1,11 +1,10 @@
-﻿using CardGame;
-using CardGames;
-using CrazyEightsGame;
+﻿using CardGames;
 using log4net;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("CrazyEightsGameTests")]
 namespace SheddingCardGames
 {
     public class CrazyEightsGame : ICardGame
@@ -25,8 +24,8 @@ namespace SheddingCardGames
             King = Card.Values.King     // (reserved)
         }
 
-        internal Deck PlayDeck = new Deck(Deck.DeckType.FrenchIncludingJokers);
-        internal Deck DiscardPile = new Deck(Deck.DeckType.Empty);
+        internal Deck PlayDeck = new Deck(DeckType.FrenchIncludingJokers);
+        internal Deck DiscardPile = new Deck(DeckType.Empty);
         internal CrazyEightsPlayers Players = new CrazyEightsPlayers();
         
         public CrazyEightsGame(CrazyEightsPlayers crazyEightsPlayers)

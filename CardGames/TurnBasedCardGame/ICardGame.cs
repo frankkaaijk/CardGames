@@ -1,6 +1,4 @@
-﻿using CardGames;
-
-namespace CardGame
+﻿namespace CardGames
 {
     public interface ICardGame
     {

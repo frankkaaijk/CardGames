@@ -38,8 +38,8 @@ namespace CardGameTests
         [Fact]
         public void DisplayHand()
         {
-            Assert.Contains("King of Clubs", player1.ShowHand());
-            Assert.Contains("Eight of Clubs", player2.ShowHand());
+            Assert.Contains(new Card(Suits.Clubs, Values.King), player1.ShowHand());
+            Assert.Contains(new Card(Suits.Clubs, Values.Eight), player2.ShowHand());
         }
 
         [Fact]

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using log4net;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("CardGameTests")]
 namespace CardGames
 {
     public static class DeckExtensions
@@ -15,18 +16,17 @@ namespace CardGames
             return new Stack<T>(new Stack<T>(oldStack));
         }
     }
+    public enum DeckType
+    {
+        Empty,
+        French,
+        FrenchIncludingJokers
+    }
 
     public class Deck : IEquatable<object>
     {
         private static readonly ILog log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        public enum DeckType
-        {
-            Empty,
-            French,
-            FrenchIncludingJokers
-        }
 
         internal static Random random = new Random();
         internal Stack<Card> Cards;

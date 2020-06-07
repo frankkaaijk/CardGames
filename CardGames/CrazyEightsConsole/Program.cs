@@ -1,9 +1,8 @@
-﻿using System;
-using CardGames;
-using System.Text.RegularExpressions;
+﻿using CardGames;
+using SheddingCardGames;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using CrazyEightsGame;
 
 namespace CrazyEightsConsole
 {
@@ -27,7 +26,7 @@ namespace CrazyEightsConsole
             var crazyEightsPlayers = new CrazyEightsPlayers();
             SetupPlayers(crazyEightsPlayers, numberOfPlayers);
 
-            var crazyEightsGame = new SheddingCardGames.CrazyEightsGame(crazyEightsPlayers);
+            var crazyEightsGame = new CrazyEightsGame(crazyEightsPlayers);
             crazyEightsGame.DealHands();
                         
             while (true)
@@ -64,7 +63,7 @@ namespace CrazyEightsConsole
                 {
                     Console.WriteLine(ex.Message);
                     Console.Write(inputString);
-                    playerName = Console.ReadLine();
+                    _ = Console.ReadLine();
                 }
             }
         }

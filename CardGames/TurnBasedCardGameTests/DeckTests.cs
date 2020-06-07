@@ -1,7 +1,6 @@
 using System;
 using Xunit;
 using CardGames;
-using static CardGames.Deck;
 
 namespace CardGameTests
 {

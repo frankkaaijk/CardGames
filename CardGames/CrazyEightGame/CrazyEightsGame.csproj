@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TurnBasedCardGame\CardGame.csproj" />
+    <ProjectReference Include="..\TurnBasedCardGame\CardGames.csproj" />
   </ItemGroup>
 
 </Project>
