@@ -8,77 +8,67 @@ namespace CrazyEightsGameTests
 {
     public class CrazyEightsTests
     { 
-        private CrazyEightsGame CrazyEightsGameUnderTest;
-        
         public CrazyEightsTests()
         {        
         }
 
         [Fact]
-        //public void Hit()
-        //{
-        //   var playersUnderTest = new CrazyEightsPlayers();
-        //    playersUnderTest.AddPlayer(new Player("Test1"));
-        //    playersUnderTest.AddPlayer(new Player("Test2"));
-        //    playersUnderTest.Players[0].GiveHand(new List<Card> {
-        //        new Card(topCard.Suit, Card.Values.Eight),
-        //        new Card(topCard.Suit, Card.Values.Two),
-        //        new Card(Card.Suits.Hearts, Card.Values.Four) });
-        //    playersUnderTest.Players[1].GiveHand(new List<Card> {
-        //        new Card(Card.Suits.Clubs, Card.Values.Six),
-        //        new Card(Card.Suits.Spades, Card.Values.Three) });
+        public void TakeTurn()
+        {
+            var playersUnderTest = new CrazyEightsPlayers();
+            playersUnderTest.AddPlayer(new Player("Test1"));
+            playersUnderTest.AddPlayer(new Player("Test2"));
 
-        //    var result = CrazyEightsGameUnderTest.TakeTurn(playersUnderTest.Players[0], new Card(topCard.Suit, Card.Values.Eight));
-        //    Assert.True(NextMove.SkipNextPlayer == result);
-        //    result = CrazyEightsGameUnderTest.Hit(new Card(topCard.Suit, Card.Values.Two), ref player1, ref player2);
-        //    Assert.True(NextMove.NextPlayer == result);
-        //}
+            var CrazyEightsGameUnderTest = new CrazyEightsGame(playersUnderTest);
+            var topCard = CrazyEightsGameUnderTest.TopOfDeck();
+            playersUnderTest.Players[0].GiveHand(new List<Card> {
+                new Card(topCard.Suit, Card.Values.Eight),
+                new Card(topCard.Suit, Card.Values.Two),
+                new Card(Card.Suits.Hearts, Card.Values.Four) });
+            playersUnderTest.Players[1].GiveHand(new List<Card> {
+                new Card(Card.Suits.Clubs, Card.Values.Six),
+                new Card(Card.Suits.Spades, Card.Values.Three) });
 
-        //[Fact]
-        //public void Stay()
-        //{
-        //    var player1 = new Player("Test1");
-        //    player1.GiveHand(new List<Card> { new Card(Card.Suits.Clubs, Card.Values.Eight), new Card(Card.Suits.Hearts, Card.Values.Two) });
+            // Playing eight skips the next player
+            CrazyEightsGameUnderTest.TakeTurn(playersUnderTest.Players[0], new Card(topCard.Suit, Card.Values.Eight));
+            Assert.Equal(playersUnderTest.Players[0], CrazyEightsGameUnderTest.Players.GetPlayer());
+            
+            // Playing two adds two card to the next player
+            CrazyEightsGameUnderTest.TakeTurn(CrazyEightsGameUnderTest.Players.GetPlayer(), new Card(topCard.Suit, Card.Values.Two));
+            Assert.True(4 == playersUnderTest.Players[1].ShowHand().Count);
 
-        //    var result = CrazyEightsGameUnderTest.Stay(ref player1);
-        //    Assert.True(NextMove.NextPlayer == result);
-        //    var count = player1.ShowHand().Split(Environment.NewLine).Length;
-        //    Assert.True(3 == count);
-        //}
+            // Played card is not possible on discard pile (second player at play)
+            CrazyEightsGameUnderTest.TakeTurn(CrazyEightsGameUnderTest.Players.GetPlayer(),
+                new Card(Card.Suits.Jokers, Card.Values.Ace));
+            Assert.Equal(playersUnderTest.Players[1], CrazyEightsGameUnderTest.Players.GetPlayer());
 
-        //[Fact]
-        //public void StateWon()
-        //{
-        //    CrazyEightsGameUnderTest.SetState(GameStates.Won);
-        //    var player1 = new Player("Test1");
-        //    var player2 = new Player("Test2");
-        //    Assert.Throws<NotSupportedException>(() => CrazyEightsGameUnderTest.Stay(ref player1));
-        //    Assert.Throws<NotSupportedException>(() => CrazyEightsGameUnderTest.Hit(null, ref player1, ref player2));
-        //    Assert.Throws<NotSupportedException>(() => CrazyEightsGameUnderTest.ShowTopOfDeck());
-        //    Assert.Throws<NotSupportedException>(() => CrazyEightsGameUnderTest.DealHand());
+            // Played card not in possession (turn sticks)
+            CrazyEightsGameUnderTest.TakeTurn(
+                CrazyEightsGameUnderTest.Players.GetPlayer(), new Card(Card.Suits.Diamonds, Card.Values.Jack));
+            Assert.Equal(playersUnderTest.Players[1], CrazyEightsGameUnderTest.Players.GetPlayer());
 
-        //    Assert.Throws<NotSupportedException>(() => CrazyEightsGameUnderTest.SetState(GameStates.Playing));
-        //}
+            // Unknown player 
+            Assert.Throws<InvalidOperationException>(() => CrazyEightsGameUnderTest.TakeTurn(
+                new Player("Test3"), new Card(Card.Suits.Hearts, Card.Values.Seven)));
+        }
 
-        //[Fact]
-        //public void FlipDecks()
-        //{
-        //    // First draw almost all cards from the deck.
-        //    var crazyEightsPlayingUnderTest = new CrazyEightsGame.States.CrazyEightsPlaying(CrazyEightsGameUnderTest);
-        //    var playedCards = crazyEightsPlayingUnderTest.PlayDeck.DealHand(53);
+        [Fact]
+        public void Stay()
+        {
+            var playersUnderTest = new CrazyEightsPlayers();
+            playersUnderTest.AddPlayer(new Player("Test1"));
+            playersUnderTest.AddPlayer(new Player("Test2"));
 
-        //    // Force these cards to the discard deck as if they were played.
-        //    foreach (var card in playedCards)
-        //    {
-        //        crazyEightsPlayingUnderTest.DiscardDeck.AddCard(card);
-        //    }
+            var CrazyEightsGameUnderTest = new CrazyEightsGame(playersUnderTest);
 
-        //    // Now try and draw four more cards
-        //    crazyEightsPlayingUnderTest.DealHand();
+            playersUnderTest.Players[0].GiveHand(new List<Card> { 
+                new Card(Card.Suits.Clubs, Card.Values.Eight), 
+                new Card(Card.Suits.Hearts, Card.Values.Two) 
+            });
 
-        //    // Deck should be resetted (DealHand has taken 4 cards so card count is 50, not 54)
-        //    Assert.True(crazyEightsPlayingUnderTest.PlayDeck.Cards.Count == 50);
-        //    Assert.True(crazyEightsPlayingUnderTest.DiscardDeck.Cards.Count == 1);
-        //}
+            CrazyEightsGameUnderTest.SkipTurn(CrazyEightsGameUnderTest.Players.GetPlayer());
+            Assert.True(3 == playersUnderTest.Players[0].ShowHand().Count);
+            Assert.Equal(new Player("Test2"), CrazyEightsGameUnderTest.Players.GetPlayer());
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace SheddingCardGames
         
         public CrazyEightsGame(CrazyEightsPlayers crazyEightsPlayers)
         {
-            PlayDeck.Shuffle();
+            PlayDeck.Shuffle();            
             DiscardPile.AddCard(PlayDeck.DealHand(1).First()); // First card to play with 
             Players = crazyEightsPlayers;
         }
@@ -56,11 +56,20 @@ namespace SheddingCardGames
             }
 
             var numberOfCards = Players.Count == 2 ? 7 : 5;
-            
-            foreach(Player player in Players)
+
+            try
             {
-                player.GiveHand(PlayDeck.DealHand(numberOfCards));
-            }            
+                foreach (Player player in Players)
+                {
+                    player.GiveHand(PlayDeck.DealHand(numberOfCards));
+                }
+            }
+            catch (InvalidOperationException e)
+            {
+                // Shouldn't happen, game is just initialized.
+                log.Error("Not enough cards in playdeck");
+                throw e;
+            }
         }
 
         public void TakeTurn(Player player, Card card)
@@ -70,7 +79,12 @@ namespace SheddingCardGames
                 throw new InvalidOperationException("Unknown player");
             }
 
-            if (IsValidCard(card))
+            if(Players.GetPlayer() != player)
+            {
+                throw new InvalidOperationException("Player not at play");
+            }
+
+            if (Players.GetPlayer().ShowHand().Contains(card) && IsValidCard(card))
             {
                 // Update discard pile
                 DiscardPile.AddCard(card);
@@ -83,8 +97,8 @@ namespace SheddingCardGames
         
         public void SkipTurn(Player player)
         {
-            Players.NextPlayer();
             Players.GetPlayer().AddToHand(PlayDeck.DealHand(1));
+            Players.NextPlayer();            
         }
 
         private bool IsValidCard(Card cardToPlay)
@@ -101,7 +115,16 @@ namespace SheddingCardGames
             if (Card.Suits.Jokers == cardToPlay.Suit)
             {
                 Players.NextPlayer();
-                Players.GetPlayer().AddToHand(PlayDeck.DealHand(5));
+                try
+                {
+                    Players.GetPlayer().AddToHand(PlayDeck.DealHand(5));
+                }
+                catch (InvalidOperationException)
+                {
+                    ResetDecks();
+                    Players.GetPlayer().AddToHand(PlayDeck.DealHand(5));
+                }
+                
             }
 
             // Either the suit or value was correct so let's see if the card was a special one
@@ -117,7 +140,15 @@ namespace SheddingCardGames
                 case (Card.Values)SpecialValues.Two:
                     {
                         Players.NextPlayer();
-                        Players.GetPlayer().AddToHand(PlayDeck.DealHand(2));
+                        try
+                        {
+                            Players.GetPlayer().AddToHand(PlayDeck.DealHand(2));
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            ResetDecks();
+                            Players.GetPlayer().AddToHand(PlayDeck.DealHand(5));
+                        }
                         break;                        
                     }
                 case (Card.Values)SpecialValues.Seven:
