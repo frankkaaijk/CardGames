@@ -1,5 +1,6 @@
 ﻿using CardGames;
 using SheddingCardGames;
+using SheddingCardGames.CrazyEightsGame;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,17 +24,17 @@ namespace CrazyEightsConsole
             Console.Write("How many players?");
             Int32.TryParse(Console.ReadLine(), out var numberOfPlayers);
 
-            var crazyEightsPlayers = new CrazyEightsPlayers();
-            SetupPlayers(crazyEightsPlayers, numberOfPlayers);
+            var crazyEightsGame = new CrazyEightsGame();
 
-            var crazyEightsGame = new CrazyEightsGame(crazyEightsPlayers);
+            SetupPlayers(crazyEightsGame, numberOfPlayers);
+
             crazyEightsGame.DealHands();
                         
             while (true)
             {
                 Console.WriteLine("Top of Crazy Eights deck: " + crazyEightsGame.TopOfDeck());
 
-                Player currentPlayer = crazyEightsPlayers.GetPlayer();
+                Player currentPlayer = crazyEightsGame.GetPlayer();
                 Console.WriteLine(currentPlayer.Name + " has: ");
                 var cards = CardSelection(currentPlayer);
                 Console.WriteLine(cards.MyToString());
@@ -41,14 +42,14 @@ namespace CrazyEightsConsole
                 int.TryParse(Console.ReadLine(), out var play);
                 if (play == 0)
                 {
-                    crazyEightsGame.SkipTurn(crazyEightsPlayers.GetPlayer());
+                    crazyEightsGame.SkipTurn(crazyEightsGame.GetPlayer());
                     continue;
                 }
                 crazyEightsGame.TakeTurn(currentPlayer, currentPlayer.ShowHand().ElementAt(play-1));
             }
         }
 
-        private static void SetupPlayers(CrazyEightsPlayers players, int numberOfPlayers)
+        private static void SetupPlayers(CrazyEightsGame game, int numberOfPlayers)
         {
             for (int i = 0; i < numberOfPlayers; i++)
             {
@@ -57,7 +58,7 @@ namespace CrazyEightsConsole
                 var playerName = Console.ReadLine();
                 try
                 {
-                    players.AddPlayer(new Player(playerName));
+                    game.AddPlayer(new Player(playerName));
                 }
                 catch( NotImplementedException ex)
                 {
